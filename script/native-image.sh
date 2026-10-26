@@ -2,7 +2,11 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-if ! command -v native-image >/dev/null 2>&1; then
+if command -v native-image >/dev/null 2>&1; then
+  NATIVE_IMAGE=native-image
+elif command -v native-image.cmd >/dev/null 2>&1; then
+  NATIVE_IMAGE=native-image.cmd # Windows
+else
   echo "error: native-image not found on PATH (install a GraalVM JDK)" >&2
   exit 1
 fi
@@ -10,8 +14,8 @@ fi
 echo "+ clj -T:build uber"
 clojure -T:build uber
 
-echo "+ native-image ..."
-native-image \
+echo "+ $NATIVE_IMAGE ..."
+"$NATIVE_IMAGE" \
   -jar target/cljp.jar \
   -H:Name=cljp \
   -H:+ReportExceptionStackTraces \
