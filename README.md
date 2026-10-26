@@ -25,6 +25,18 @@ sudo mv cljp /usr/local/bin/
 (use `cljp-macos-arm64` instead on macOS). On Windows, download `cljp-windows-x86_64.exe`,
 rename it to `cljp.exe`, and place it anywhere on your `%PATH%`.
 
+### macOS: "Apple could not verify..."
+
+`cljp` isn't code-signed/notarized yet, so macOS Gatekeeper will refuse to run a
+binary downloaded from the internet. Clear the quarantine flag once after
+downloading:
+
+```sh
+xattr -d com.apple.quarantine ./cljp
+```
+
+(or right-click the file → Open → confirm in the dialog that appears).
+
 ## Usage
 
 ```
