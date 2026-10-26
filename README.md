@@ -4,6 +4,27 @@ A proof of concept native-binary CLI for Clojure projects, wrapping the
 [deps and CLI](https://clojure.org/guides/deps_and_cli) and
 [tools.build](https://clojure.org/guides/tools_build) guides behind a single `cljp` (clojure project) command.
 
+## Installation
+
+Pre-built binaries are published on the [Releases page](https://github.com/thiagooak/cljp/releases/latest) for:
+
+| Platform                | Asset                        |
+|--------------------------|------------------------------|
+| Linux (x86_64)           | `cljp-linux-x86_64`          |
+| macOS (Apple Silicon)    | `cljp-macos-arm64`           |
+| Windows (x86_64)         | `cljp-windows-x86_64.exe`    |
+
+Download the asset for your platform, make it executable, and put it on your `PATH`:
+
+```sh
+curl -L -o cljp https://github.com/thiagooak/cljp/releases/latest/download/cljp-linux-x86_64
+chmod +x cljp
+sudo mv cljp /usr/local/bin/
+```
+
+(use `cljp-macos-arm64` instead on macOS). On Windows, download `cljp-windows-x86_64.exe`,
+rename it to `cljp.exe`, and place it anywhere on your `%PATH%`.
+
 ## Usage
 
 ```
