@@ -46,6 +46,15 @@ cljp new <name> [--dir <path>]
 Scaffolds a new project (`deps.edn`, `build.clj` wired to `tools.build`,
 a starter namespace + test, `.gitignore`, `README.md`).
 
+```
+cljp add <lib>[@version]
+```
+
+Adds a dependency to `deps.edn` in the current directory, preserving its
+comments and formatting. Without `@version`, the latest stable version is
+looked up with `clojure -X:deps find-versions`.
+Adding a lib that is already present updates its version.
+
 ## Dev
 
 ```sh

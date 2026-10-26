@@ -3,6 +3,7 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.tools.cli :as cli]
+            [tools.project.add :as add]
             [tools.project.new :as new]))
 
 (def ^:private usage
@@ -10,11 +11,13 @@
 
 Usage:
   cljp new <name> [--dir <path>]
+  cljp add <lib>[@version]
   cljp version
   cljp help
 
 Commands:
   new      Scaffold a new project
+  add      Add a dependency to deps.edn (latest version if none given)
   version  Print version (also --version)
   help     Show this message
 ")
@@ -36,6 +39,12 @@ Commands:
     (new/new-project {:name (first arguments) :dir (:dir options)})
     0))
 
+(defn- cmd-add [args]
+  (when-not (and (= 1 (count args)) (not (str/starts-with? (first args) "-")))
+    (throw (ex-info "Usage: cljp add <lib>[@version]" {})))
+  (add/add-dep (add/parse-spec (first args)))
+  0)
+
 (defn- cmd-help [_args]
   (print usage)
   (flush)
@@ -52,6 +61,7 @@ Commands:
   (try
     (case command
       "new" (cmd-new args)
+      "add" (cmd-add args)
       ("version" "--version") (cmd-version args)
       ("help" "--help" "-h" nil) (cmd-help args)
       (do
