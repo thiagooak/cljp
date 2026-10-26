@@ -1,0 +1,97 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: DeLaGuardo/setup-clojure@13
+        with:
+          cli: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: deps-${{ runner.os }}-${{ hashFiles('deps.edn') }}
+          restore-keys: deps-${{ runner.os }}-
+
+      - name: Run tests
+        run: clojure -X:test
+
+  native-image:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            binary: cljp
+          - os: macos-latest
+            binary: cljp
+          - os: windows-latest
+            binary: cljp.exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1.6.7
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: DeLaGuardo/setup-clojure@13
+        with:
+          cli: latest
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # windows-latest ships MSVC Build Tools but doesn't put cl.exe/link.exe
+      # on PATH by default; native-image needs them to link the executable.
+      - name: Set up MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          key: deps-${{ runner.os }}-${{ hashFiles('deps.edn') }}
+          restore-keys: deps-${{ runner.os }}-
+
+      - name: Build native binary
+        shell: bash
+        run: script/native-image.sh
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          ./${{ matrix.binary }} help
+          ./${{ matrix.binary }} new smoke-test --dir "${RUNNER_TEMP}/smoke-test"
+          test -f "${RUNNER_TEMP}/smoke-test/deps.edn"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cljp-${{ runner.os }}
+          path: ${{ matrix.binary }}
+          if-no-files-found: error

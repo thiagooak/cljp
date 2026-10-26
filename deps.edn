@@ -1,0 +1,22 @@
+{:paths ["src" "resources"]
+
+ :deps
+ {org.clojure/clojure {:mvn/version "1.12.0"}
+  org.clojure/tools.cli {:mvn/version "1.1.230"}}
+
+ :aliases
+ {;; clj -T:build <task>
+  :build
+  {:deps {io.github.clojure/tools.build {:mvn/version "0.10.5"}}
+   :ns-default build}
+
+  ;; clj -X:test
+  :test
+  {:extra-paths ["test"]
+   :extra-deps {io.github.cognitect-labs/test-runner
+                {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :exec-fn cognitect.test-runner.api/test}
+
+  ;; clj -T:build native-config (see script/native-image.sh)
+  :native
+  {:extra-deps {com.github.clj-easy/graal-build-time {:mvn/version "1.0.5"}}}}}
