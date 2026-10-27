@@ -4,6 +4,8 @@ A proof of concept native-binary CLI for Clojure projects, wrapping the
 [deps and CLI](https://clojure.org/guides/deps_and_cli) and
 [tools.build](https://clojure.org/guides/tools_build) guides behind a single `cljp` (clojure project) command.
 
+<img width="1952" height="1080" alt="cljp-new" src="https://github.com/user-attachments/assets/084a5284-886c-4525-a9bc-dadfc8ffd056" />
+
 ## Requirements
 
 The [Clojure CLI](https://clojure.org/guides/install_clojure)
