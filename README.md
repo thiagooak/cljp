@@ -110,3 +110,11 @@ gu install native-image
 script/native-image.sh
 ./cljp new my-app
 ```
+
+## AI use disclosure
+
+This project is a proof of concept. Its code was generated with
+[Claude Code](https://claude.com/claude-code) with human review.
+If there is ever a chance that this POC would become an upstream contribution
+to the Clojure CLI, this repository would be discarded
+and a non-generated version would be written from scratch instead.
