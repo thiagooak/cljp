@@ -4,9 +4,27 @@ A proof of concept native-binary CLI for Clojure projects, wrapping the
 [deps and CLI](https://clojure.org/guides/deps_and_cli) and
 [tools.build](https://clojure.org/guides/tools_build) guides behind a single `cljp` (clojure project) command.
 
+## Requirements
+
+The [Clojure CLI](https://clojure.org/guides/install_clojure)
+must be installed and on your `PATH`.
+
 ## Installation
 
-Pre-built binaries are published on the [Releases page](https://github.com/thiagooak/cljp/releases/latest) for:
+### Linux and macOS (Apple Silicon)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/thiagooak/cljp/main/install.sh | sh
+```
+
+This downloads the latest release binary, verifies it against the release's
+`SHA256SUMS`, and installs it to `~/.cljp/bin/cljp`. If that directory isn't
+on your `PATH`, the script appends it to your shell profile.
+Set `CLJP_INSTALL_DIR` to install elsewhere.
+
+### Manual download
+
+Pre-built binaries and `SHA256SUMS` are published on the [Releases page](https://github.com/thiagooak/cljp/releases/latest) for:
 
 | Platform                | Asset                        |
 |--------------------------|------------------------------|
@@ -28,7 +46,7 @@ rename it to `cljp.exe`, and place it anywhere on your `%PATH%`.
 ### macOS: "Apple could not verify..."
 
 `cljp` isn't code-signed/notarized yet, so macOS Gatekeeper will refuse to run a
-binary downloaded from the internet. Clear the quarantine flag once after
+binary downloaded through a browser. (The install script above isn't affected.) Clear the quarantine flag once after
 downloading:
 
 ```sh

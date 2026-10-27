@@ -118,6 +118,8 @@ jobs:
           cp dist/cljp-macOS/cljp release/cljp-macos-arm64
           cp dist/cljp-Windows/cljp.exe release/cljp-windows-x86_64.exe
           chmod +x release/cljp-linux-x86_64 release/cljp-macos-arm64
+          (cd release && sha256sum cljp-* > SHA256SUMS)
+          cat release/SHA256SUMS
 
       - name: Create release
         env:
