@@ -14,13 +14,27 @@ must be installed and on your `PATH`.
 ### Linux and macOS (Apple Silicon)
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/thiagooak/cljp/main/install.sh | sh
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/thiagooak/cljp/main/install.sh | sh
 ```
 
 This downloads the latest release binary, verifies it against the release's
-`SHA256SUMS`, and installs it to `~/.cljp/bin/cljp`. If that directory isn't
-on your `PATH`, the script appends it to your shell profile.
-Set `CLJP_INSTALL_DIR` to install elsewhere.
+`SHA256SUMS`, and installs it to `~/.cljp/bin/cljp`. It also writes
+`~/.cljp/env`, and if `~/.cljp/bin` isn't on your `PATH` it adds a line to your
+shell profile adding it.
+
+Set `CLJP_HOME` to install somewhere other than `~/.cljp`, or `CLJP_VERSION`
+(e.g. `v0.2.0`) to pin a release. If another `cljp` is already on your `PATH`,
+the script warns you about it.
+
+### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/thiagooak/cljp/main/install.ps1 | iex
+```
+
+Same checksum verification as above. It installs to `%USERPROFILE%\.cljp\bin\cljp.exe`
+and adds that directory to your user `PATH`; open a new terminal afterwards.
+`CLJP_HOME` and `CLJP_VERSION` work the same way.
 
 ### Manual download
 
